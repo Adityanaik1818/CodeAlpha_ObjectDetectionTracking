@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    
+    <!-- Link to our CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Google Fonts for a modern dashboard look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>👁️ VisionTrack AI</h1>
+        <p>Real-Time Object Detection & Tracking System • CodeAlpha Task 4</p>
+    </header>
+
+    <main class="dashboard">
+        
+        <!-- LEFT COLUMN: Video & Controls -->
+        <div class="main-content">
+            
+            <!-- 1. The Video Stream -->
+            <div class="video-container">
+                <img src="{{ url_for('video_feed') }}" alt="Live Video Feed" onerror="this.onerror=null; this.src=''; this.alt='Camera unavailable or initializing...';">
+            </div>
+            
+            <!-- 2. The Media Control Center -->
+            <div class="upload-panel" style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin-top: 20px;">
+                <h2>Media Controls</h2>
+                
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    
+                    <!-- Static Image Upload -->
+                    <form action="/upload_image" method="POST" enctype="multipart/form-data" target="_blank" style="flex: 1; border: 1px dashed var(--primary); padding: 15px; border-radius: 8px;">
+                        <h3 style="margin-top: 0; font-size: 1rem;">1. Analyze Static Image</h3>
+                        <input type="file" name="file" accept="image/*" required style="color: var(--text); width: 100%; margin-bottom: 10px;">
+                        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; width: 100%;">
+                            Upload Image
+                        </button>
+                    </form>
+
+                    <!-- Pre-recorded Video Upload -->
+                    <form action="/upload_video" method="POST" enctype="multipart/form-data" style="flex: 1; border: 1px dashed var(--accent); padding: 15px; border-radius: 8px;">
+                        <h3 style="margin-top: 0; font-size: 1rem;">2. Analyze Recorded Video</h3>
+                        <input type="file" name="file" accept="video/mp4,video/avi" required style="color: var(--text); width: 100%; margin-bottom: 10px;">
+                        <button type="submit" style="background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; width: 100%;">
+                            Upload & Play Video
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Reset to Live Webcam -->
+                <form action="/reset_webcam" method="POST" style="margin-top: 15px;">
+                    <button type="submit" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold;">
+                        🎥 Return to Live Webcam Feed
+                    </button>
+                </form>
+            </div>
+            
+        </div>
+
+        <!-- RIGHT COLUMN: Real-Time Statistics -->
+        <div class="stats-panel">
+            <h2>Live Statistics</h2>
+            
+            <div class="stat-card">
+                <div class="stat-title">Status</div>
+                <div class="stat-value" id="status-val">Initializing...</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Processing Speed (FPS)</div>
+                <div class="stat-value" id="fps-val">0.0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Current Detections</div>
+                <div class="stat-value" id="det-val">0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Unique Tracked Objects</div>
+                <div class="stat-value" id="unique-val">0</div>
+            </div>
+            
+            <div class="config-info">
+                <p><strong>Model:</strong> YOLOv8 Nano</p>
+                <p><strong>Tracking Algorithm:</strong> BoT-SORT / ByteTrack</p>
+                <p><strong>Confidence Threshold:</strong> 45%</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Link to our JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
